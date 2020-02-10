@@ -1,0 +1,59 @@
+<div id=D__ID>
+    <section id=form_container__ID>
+    	<div id=header__ID>
+    		Item List
+    	</div>
+    	<form id=F__ID>
+    		<div class="container">
+    			<div class="row row__ID">
+    				<div class=col>
+    					<b>Item Name</b>
+    					<input type="text" class="form-control" name=item_name />
+    				</div>
+                </div>
+    			<div class="row row__ID">
+    				<div class=col>
+    					<b>Amount in USD</b>
+    					<input type="text" class="form-control" name=amount_usd />
+    				</div>
+                </div>
+    			<div class="row row__ID">
+    				<div class=col>
+    					<b>Amount in AUD</b>
+    					<input type="text" class="form-control" name=amount_aud />
+    				</div>
+                </div>
+    			<div class="row c_print">
+    				<div class=col>
+    					<button id=submit__ID type="submit" class="btn btn-secondary">Submit</button>
+    				</div>
+    			</div>
+    		</div>
+    	</form>
+	</section>
+	VmInclude:__COMPONENT__/m/model.01.html
+    <script>
+    	function F__ID(){
+    		//-------------------------------------
+			VmInclude:__COMPONENT__/f/form.01.js
+			//-------------------------------------
+		}
+    </script>
+    <style>
+        #form_container__ID{
+            max-width:700px;
+        }
+        VmInclude:__COMPONENT__/f/form.01.css
+        #F__ID b{
+            display:inline-block;
+            margin-bottom:10px;
+        }
+		.no_border__ID{
+			border:0px solid black;
+		}
+		#items__ID input:focus { 
+		  	border:0 solid black !important;
+			outline: none !important;
+		}
+    </style>
+</div>
