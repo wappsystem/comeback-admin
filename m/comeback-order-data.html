@@ -1,0 +1,38 @@
+<div id=D__ID>
+    <div>
+        VmInclude:__COMPONENT__/g/grid.01.html
+    </div>
+    <script>
+        function F__ID(){
+            //-------------------------------------
+            VmInclude:__COMPONENT__/g/grid.01.js
+            //-------------------------------------
+            var fields="Order Number|UID,Check,Total,Paid,Recalc,book_number,book_price,compliment_number,compliment_price,Date,Numeric_Time,Bill_Name,Bill_Address_1,Bill_Address_2,Bill_City,Bill_State,Bill_Country,Bill_Zip,Bill_Phone,Bill_Email,Ship_Name,Ship_Address_1,Ship_Address_2,Ship_City,Ship_State,Ship_Country,Ship_Zip,Ship_Phone";
+            m.fields="_Form,"+fields+",Submit_date,Submitted_by";
+            //-------------------------------------
+            m.cell_render=function(records,I,field,td){
+                switch(field){
+                    case 'Paid':
+                        td.html((records[I].Data.stripe[0].amount/100).toFixed(2));
+                        break;
+                    case 'Recalc':
+                        td.html((parseInt(records[I].Data.book_number)*parseInt(records[I].Data.book_price)+parseInt(records[I].Data.compliment_number)*parseInt(records[I].Data.compliment_price)).toFixed(2));
+                        break;
+                    case 'Check':
+                        console.log(records[I].Data.Total+' - '+(records[I].Data.stripe[0].amount/100).toFixed(2));
+                        if(records[I].Data.Total!=(records[I].Data.stripe[0].amount/100).toFixed(2) || records[I].Data.Total!=(parseInt(records[I].Data.book_number)*parseInt(records[I].Data.book_price)+parseInt(records[I].Data.compliment_number)*parseInt(records[I].Data.compliment_price)).toFixed(2)){
+                            td.html("<span style='color:red'><i class='fas fa-circle'></i></span>");
+                        }
+                        else{
+                            td.html("<span style='color:green'><i class='fas fa-circle'></i></span>");
+                        }
+                        td.css('text-align','center');
+                        break;
+                }
+            }            
+        }
+    </script>
+    <style>
+        VmInclude:__COMPONENT__/g/grid.01.css
+    </style>
+</div>
