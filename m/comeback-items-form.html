@@ -1,0 +1,65 @@
+<div id=D__ID>
+    <section id=form_container__ID>
+    	<div id=header__ID>
+    		Order
+    	</div>
+    	<form id=F__ID>
+    		<div class="container">
+    			<div class="row row__ID">
+    				<div class=col>
+    					<b>Order Number</b>
+    					<input type="text" class="form-control" name=Order_Number readonly />
+    				</div>
+                </div>
+    			<div class="row row__ID">
+    				<div class=col>
+    					<b>Total</b>
+    					<input type="text" class="form-control" name=Total />
+    				</div>
+                </div>
+    			<div class="row row__ID">
+    				<div class=col>
+    					<b>Paid</b>
+    					<input type="text" class="form-control" name=Paid />
+    				</div>
+                </div>
+    			<div class="row c_print">
+    				<div class=col>
+    					<button id=submit__ID type="submit" class="btn btn-secondary">Submit</button>
+    				</div>
+    			</div>
+    		</div>
+    	</form>
+	</section>
+	VmInclude:__COMPONENT__/m/model.01.html
+    <script>
+    	function F__ID(){
+    		//-------------------------------------
+			VmInclude:__COMPONENT__/f/form.01.js
+			//-------------------------------------
+			m.default_load = m.load;
+        	m.load = function () {
+				m.default_load();
+				$('input[name="Order_Number"]').val(m.input.record.UID);
+				$('input[name="Paid"]').val((m.input.record.Data.stripe[0].amount/100).toFixed(2));
+			}
+		}
+    </script>
+    <style>
+        #form_container__ID{
+            max-width:700px;
+        }
+        VmInclude:__COMPONENT__/f/form.01.css
+        #F__ID b{
+            display:inline-block;
+            margin-bottom:10px;
+        }
+		.no_border__ID{
+			border:0px solid black;
+		}
+		#items__ID input:focus { 
+		  	border:0 solid black !important;
+			outline: none !important;
+		}
+    </style>
+</div>

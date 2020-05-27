@@ -8,8 +8,8 @@
         "comeback-charge-list-form":     {url:"$H/m/comeback-charge-list-form.html",Table:"comeback-charge-list",private:1},
         "comeback-order-data":     {url:"$H/m/comeback-order-data.html",Table:"comeback-order",form_module:"comeback-order-form",private:1},
         "comeback-order-form":     {url:"$H/m/comeback-order-form.html",Table:"comeback-order",private:1},
-        "comeback-items-data":     {url:"$H/m/comeback-items-data.html",Table:"comeback-items",form_module:"comeback-items-form",private:1},
-        "comeback-items-form":     {url:"$H/m/comeback-items-form.html",Table:"comeback-items",private:1},
+        "comeback-items-data":     {url:"$H/m/comeback-items-data.html",Table:"comeback-order",form_module:"comeback-items-form",private:1},
+        "comeback-items-form":     {url:"$H/m/comeback-items-form.html",Table:"comeback-order",private:1},
     }
     for(p in modules){
         $vm.module_list[p]=modules[p]; 
