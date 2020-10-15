@@ -2,8 +2,15 @@
 //year dropdown
 var $List1=$('#yy__ID');
 var y=new Date().getFullYear();
+if(Math.floor((new Date().getMonth())/3) + 1>2){
+    y++
+}
 for(var i=0;i<10;i++){
-    $List1.append(  $('<option></option>').val(y-i).html(y-i)  );
+    var fy=(y-i).toString()
+    fy=fy.substring(2,4)
+    var fyy=parseInt(fy)-1;
+    fyy=fyy.toString();
+    $List1.append(  $('<option></option>').val(y-i).html('FY'+fyy+'/'+fy ));
 }
 $List1.val(y);
 //-------------------------------------
@@ -12,8 +19,12 @@ var $List2=$('#qq__ID');
 for(var i=0;i<4;i++){
     $List2.append(  $('<option></option>').val(i+1).html(i+1)  );
 }
-$List2.val( Math.floor((new Date().getMonth())/3) + 1);
+var month=Math.floor((new Date().getMonth())/3) + 1
+month=month-2;
+if(month<0) month=month+4;
+$List2.val( month);
 //-------------------------------------
+
 var m=$vm.module_list['__MODULE__'];
 if(m.prefix==undefined) m.prefix="";
 m.query={};
@@ -21,10 +32,20 @@ m.sort={I1: -1}
 m.options={};
 //-------------------------------------
 m.set_req=function(){
-    var y=$('#yy__ID').val(), q=$('#qq__ID').val();
+    var yy=$('#yy__ID').val()
+    yy='20'+yy.substring(2,4);
+    var q=$('#qq__ID').val();
+    if(parseInt(q)>2){
+        q=parseInt(q)-2;
+    }
+    else{
+        yy=parseInt(yy)-1
+        q=parseInt(q)+2;
+    }
     var mm=(parseInt(q)-1)*3;
-    var t1=new Date(y,mm,1,0,0,0,0).toJSON();
-    var t2=new Date(y,mm+3,1,0,0,0,0).toJSON();
+    //console.log(yy +' - '+q+' - '+mm)
+    var t1=new Date(yy,mm,1,0,0,0,0).toJSON();
+    var t2=new Date(yy,mm+3,1,0,0,0,0).toJSON();
     m.query={I1:{"$gte":t1,"$lt":t2}}
 };
 //-------------------------------------
