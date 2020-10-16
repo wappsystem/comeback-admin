@@ -1,107 +1,127 @@
 <div id=D__ID>
-    <section id=form_container__ID>
-    	<div id=header__ID>
-    		Transaction
-    	</div>
-    	<form id=F__ID>
-    		<div class="container">
-    			<div class="row row__ID">
-    				<div class=col>
-    					<b>Date</b>
-    					<input type="date" class="form-control" name=Date />
-    				</div>
-                </div>
-    			<div class="row row__ID">
-    				<div class=col>
-    					<b>Amount</b>
-    					<input type="number" step=0.01 class="form-control" name=Amount id=Amount__ID />
-    				</div>
-    				<div class=col>
-    					<b>Specify GST in $ if not 10%</b>
-    					<input type="number" step=0.01 class="form-control" name=other_GST id=other_GST__ID />
-    				</div>
-                </div>
-    			<div class="row row__ID">
-    				<div class=col>
-    					<b>Item</b>
-    					<input type="text" class="form-control" name=Name id=Name__ID />
-    				</div>
-                </div>
-    			<div class="row row__ID">
-    				<div class=col>
-    					<b>Description</b>
-    					<input type="text" class="form-control" name=Description />
-    				</div>
-                </div>
-    			<div class="row row__ID">
-    				<div class=col-lg-6>
-    					<b>Group</b>
-    					<input type="text" class="form-control" name=Group />
-    				</div>
-    				<div class=col-lg-6>
-    					<b>Category</b>
-    					<input type="text" class="form-control" name=Category />
-    				</div>
-                </div>
-                <div class="row row__ID">
-    				<div class=col>
-    					<b>Document</b>
-                        <div class="form-control">
-                            <u style='cursor:pointer' id=link_Document_form__ID></u>
-                            <br>
-                            <input type="file" name=Document_form style="margin-top:6px" /> <button type="button" id=x_Document_form__ID>Remove</button>
-                        </div>
-    				</div>
-    			</div>
-    			<br>
-    			<div class="row c_print">
-    				<div class=col>
-    					<button id=submit__ID type="submit" class="btn btn-secondary">Submit</button>
-						<button id=delete__ID type="button" class="btn btn-secondary">Delete</button>
-						<!--
-						<button id=copy__ID type="button" class="btn btn-secondary">Copy</button>
-						<button id=paste__ID type="button" class="btn btn-secondary">Paste</button>
-						-->
-    				</div>
-    			</div>
-				<br>
-				<div id=items__ID style='font-size:9px;color:#555'>
-					<b>Type</b>
-					<div class="row">
-						<div class=col>
-							Income: $<input type="text" name=Income readonly class=no_border__ID /><br>
-							Expense: $<input type="text" name=Expense readonly class=no_border__ID /><br>
-							Other: $<input type="text" name=Other readonly class=no_border__ID /><br>
-						</div>
-					</div>
-					<br>
-					<b>BAT Items</b>
-					<div class="row">
-						<div class=col>
-							G1 sales: $<input type="text" name=G1_sales readonly class=no_border__ID /><br>
-							1A GST on sales: $<input type="text" name=1A_GST readonly class=no_border__ID /><br>
-							1B GST on purchase: $<input type="text" name=1B_GST readonly class=no_border__ID /><br>
-							W1 salary: $<input type="text" name=W1_salary readonly class=no_border__ID /><br>
-							W2 withheld: $<input type="text" name=W2_withheld readonly class=no_border__ID /><br>
-							W4 withheld no ABN: $<input type="text" name=W4_withheld_no_ABN readonly class=no_border__ID /><br>
-							W3 withheld other: $<input type="text" name=W3_withheld_other readonly class=no_border__ID /><br>
-						</div>
-					</div>
-					<br>
-					<b>TAX Return Items</b>
-					<div class="row">
-						<div class=col>
-							Other sales: $<input type="text" name=Other_sales readonly class=no_border__ID /><br>
-							Gross interest: $<input type="text" name=Gross_interest readonly class=no_border__ID /><br>
-							Salary_expenses: $<input type="text" name=Salary_expenses readonly class=no_border__ID /><br>
-							Super expenses: $<input type="text" name=Super_expenses readonly class=no_border__ID /><br>
-							All other expenses: $<input type="text" name=All_other_expenses readonly class=no_border__ID /><br>
-						</div>
+    <!--third html start -->
+    <div class="container mt-95 mb-3">
+        <div class="row">
+            <!-- form container start -->
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 mx-auto formbox">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- form start -->
+                        <form id="F__ID">
+                            <h3>Transaction</h3>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label><span class="">Date</span>
+                                            <input type=date name="Date" class=form-control />
+                                        </label><br>
+                                        <label><span class="">Verification Number</span>
+                                            <input type=number step=1 name="Ver" class=form-control />
+                                        </label>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label><span class="">Amount</span>
+                                            <input type=number step=0.01 name="Amount" id=Amount__ID class=form-control />
+                                        </label><br>
+                                        <label><span class="">Specify GST in $ if not 10%</span>
+                                            <input type=number step=0.01 name="other_GST"id=other_GST__ID  class=form-control />
+                                        </label>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label style='width:100%'><span class="">Item</span>
+                                            <input type="text" class="form-control" name=Name id=Name__ID />
+                                        </label>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label style='width:100%'><span class="">Description</span>
+											<input type="text" class="form-control" name=Description />
+                                        </label>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label><span class="">Group</span>
+											<input type="text" class="form-control" name=Group />
+                                        </label><br>
+                                        <label><span class="">Category</span>
+											<input type="text" class="form-control" name=Category />
+                                        </label>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label><span class="">Document</span>
+											<u style='cursor:pointer' id=link_Document_form__ID></u>
+											<br>
+											<input type="file" name=Document_form style="margin-top:6px" /> <button type="button" id=x_Document_form__ID>Remove</button>
+                                        </label>
+                                    </fieldset>
+                                </div>
+							</div>
+							<button type="submit" id="submit__ID" class="btn btn-primary btn-lg">Submit</button>
+							<button type="button" id="delete__ID" class="btn btn-primary btn-lg">Delete</button>
+							<br>
+							<hr>
+							<div class="form-group"  id=items__ID style='font-size:10px;color:#555'>
+								<span class="">Type</span>
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+										<label style='font-size:9px;color:#555'><span class=""></span>
+											Income: $<input type="text" name=Income readonly class=no_border__ID /><br>
+											Expense: $<input type="text" name=Expense readonly class=no_border__ID /><br>
+											Other: $<input type="text" name=Other readonly class=no_border__ID /><br>
+										</label>
+									</fieldset>
+								</div>
+								<span class="">BAT Items</span>
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+										<label style='font-size:9px;color:#555'><span class=""></span>
+											G1 sales: $<input type="text" name=G1_sales readonly class=no_border__ID /><br>
+											1A GST on sales: $<input type="text" name=1A_GST readonly class=no_border__ID /><br>
+											1B GST on purchase: $<input type="text" name=1B_GST readonly class=no_border__ID /><br>
+											W1 salary: $<input type="text" name=W1_salary readonly class=no_border__ID /><br>
+											W2 withheld: $<input type="text" name=W2_withheld readonly class=no_border__ID /><br>
+											W4 withheld no ABN: $<input type="text" name=W4_withheld_no_ABN readonly class=no_border__ID /><br>
+											W3 withheld other: $<input type="text" name=W3_withheld_other readonly class=no_border__ID /><br>
+											</label>
+									</fieldset>
+								</div>
+								<span class="">TAX Return Items</span>
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+										<label style='font-size:9px;color:#555'><span class=""></span>
+											Other sales: $<input type="text" name=Other_sales readonly class=no_border__ID /><br>
+											Gross interest: $<input type="text" name=Gross_interest readonly class=no_border__ID /><br>
+											Salary_expenses: $<input type="text" name=Salary_expenses readonly class=no_border__ID /><br>
+											Super expenses: $<input type="text" name=Super_expenses readonly class=no_border__ID /><br>
+											All other expenses: $<input type="text" name=All_other_expenses readonly class=no_border__ID /><br>
+											</label>
+									</fieldset>
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
-    		</div>
-    	</form>
-	</section>
+			</div>
+		</div>
+    </div>
 	VmInclude:__COMPONENT__/m/model.01.html
     <script>
     	function F__ID(){
@@ -228,13 +248,16 @@
         #form_container__ID{
             max-width:700px;
         }
-        VmInclude:__COMPONENT__/f/form.01.css
+        VmInclude:__CURRENT_PATH__/wappsystem-form.css
         #F__ID b{
             display:inline-block;
             margin-bottom:10px;
         }
 		.no_border__ID{
 			border:0px solid black;
+			font-size:9px!important;
+			color:#555!important;
+			width: 40px!important;
 		}
 		#items__ID input:focus { 
 		  	border:0 solid black !important;

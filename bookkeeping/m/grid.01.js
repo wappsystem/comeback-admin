@@ -1,52 +1,12 @@
-//---------------------------------------------
-//year dropdown
-var $List1=$('#yy__ID');
-var y=new Date().getFullYear();
-if(Math.floor((new Date().getMonth())/3) + 1>2){
-    y++
-}
-for(var i=0;i<10;i++){
-    var fy=(y-i).toString()
-    fy=fy.substring(2,4)
-    var fyy=parseInt(fy)-1;
-    fyy=fyy.toString();
-    $List1.append(  $('<option></option>').val(y-i).html('FY'+fyy+'/'+fy ));
-}
-$List1.val(y);
 //-------------------------------------
-//quater dropdown
-var $List2=$('#qq__ID');
-for(var i=0;i<4;i++){
-    $List2.append(  $('<option></option>').val(i+1).html(i+1)  );
-}
-var month=Math.floor((new Date().getMonth())/3) + 1
-month=month-2;
-if(month<0) month=month+4;
-$List2.val( month);
-//-------------------------------------
-
 var m=$vm.module_list['__MODULE__'];
 if(m.prefix==undefined) m.prefix="";
 m.query={};
-m.sort={I1: -1}
-m.options={};
+m.sort={_id:-1}
+m.projection={}
+if(m.title!=undefined) $('#title__ID').text(m.title);
 //-------------------------------------
 m.set_req=function(){
-    var yy=$('#yy__ID').val()
-    yy='20'+yy.substring(2,4);
-    var q=$('#qq__ID').val();
-    if(parseInt(q)>2){
-        q=parseInt(q)-2;
-    }
-    else{
-        yy=parseInt(yy)-1
-        q=parseInt(q)+2;
-    }
-    var mm=(parseInt(q)-1)*3;
-    //console.log(yy +' - '+q+' - '+mm)
-    var t1=new Date(yy,mm,1,0,0,0,0).toJSON();
-    var t2=new Date(yy,mm+3,1,0,0,0,0).toJSON();
-    m.query={I1:{"$gte":t1,"$lt":t2}}
 };
 //-------------------------------------
 m.set_req_export=function(i1,i2){
@@ -59,34 +19,54 @@ m.request_data=function(){
     var limit=parseInt($('#page_size__ID').val());
     var skip=limit*parseInt($('#I__ID').text());
     var mt1=new Date().getTime();
-    $vm.request({cmd:"count",table:m.Table,query:m.query,options:m.options,search:$('#keyword__ID').val()},function(res){
+    var c_cmd="count";
+    if(m.cmd_type=='s') c_cmd='count-s';
+    else if(m.cmd_type=='m') c_cmd='count-m';
+    else if(m.cmd_type=='d') c_cmd='count-d';
+    else if(m.cmd_type=='p1') c_cmd='count-p1';
+    else if(m.cmd_type=='p2') c_cmd='count-p2';
+    else if(m.cmd_type=='table') c_cmd='count-table';
+    $vm.request({cmd:c_cmd,table:m.Table,query:m.query,I1:m.I1,search:$('#keyword__ID').val()},function(res){
         if(res.status=='np'){
             res.result=0;
         }
         var N=res.result;
-        $("#B__ID").text(N)        
+        $("#B__ID").text(N)
+        
         m.max_I=Math.ceil(N/limit)-1;
         var n2=skip+limit; if(n2>N) n2=N;
         var a=(skip+1).toString()+"~"+(n2).toString()+" of ";
         $("#A__ID").text(a);
     });
-    $vm.request({cmd:"find",table:m.Table,query:m.query,sort:m.sort,options:m.options,search:$('#keyword__ID').val(),skip:skip,limit:limit},function(res){
-        if(res.sys.permission==false){
-            $vm.alert("No permission. Private database table, ask the table's owner for permissions.");
-            //return;
-        }
-        if(res.result==undefined) res.result=[];
+    var f_cmd="find";
+    if(m.cmd_type=='s') f_cmd='find-s';
+    else if(m.cmd_type=='m') f_cmd='find-m';
+    else if(m.cmd_type=='d') f_cmd='find-d';
+    else if(m.cmd_type=='p1') f_cmd='find-p1';
+    else if(m.cmd_type=='p2') f_cmd='find-p2';
+    else if(m.cmd_type=='table') f_cmd='find-table';
+    $vm.request({cmd:f_cmd,table:m.Table,I1:m.I1,query:m.query,sort:m.sort,projection:m.projection,search:$('#keyword__ID').val(),skip:skip,limit:limit},function(res){
         var mt2=new Date().getTime();
         var tt_all=mt2-mt1;
         var tt_server=parseInt(res.sys.elapsed_time);
         if(tt_all<tt_server) tt_all=tt_server;
-        var db="<span style='color:#0919ec'>&#9679;</span> "; if(res.sys.db!=undefined) db="<span style='color:#0bbe0b'>&#9679;</span> ";
-        var tb="<span style='color:red'>&#9679;</span> "; if(res.sys.tb=="on") tb="<span style='color:#0bbe0b'>&#9679;</span> ";
-        $("#elapsed__ID").html(db+tb+(JSON.stringify(res.result).length/1000).toFixed(1)+"kb/"+tt_all.toString()+"ms/"+tt_server+'ms');
+        var db="<span style='color:#0919ec'>&#9679;</span> "; if(res.sys.db==1 || res.sys.db=='on') db="<span style='color:#0bbe0b'>&#9679;</span> ";
+        var tb="<span style='color:red'>&#9679;</span> ";     if(res.sys.tb==1 || res.sys.tb=='on') tb="<span style='color:#0bbe0b'>&#9679;</span> ";
+        $("#elapsed__ID").html(/*db+*/tb+(JSON.stringify(res.result).length/1000).toFixed(1)+"kb/"+tt_all.toString()+"ms/"+tt_server+'ms');
+        $("#_sys_dev_info_elapsed").html(m.Table+" "+db+tb+(JSON.stringify(res.result).length/1000).toFixed(1)+"kb/"+tt_all.toString()+"ms/"+tt_server+'ms');
+        
+        if(res.status=='np' || res.result==undefined){
+            res.result=[];
+        }
+
+        if(res.status=='np'){
+            if(res.sys.tb=='on') $vm.alert("No permission. Private database table, ask the table's owner for permissions.");
+            else $vm.alert("No permission.");
+        }
 
         m.records=res.result;
         m.res=res;
-        if(m.data_process!==undefined){ m.data_process(); }
+        if(m.data_process!==undefined){ m.data_process(res); }
         m.render();
         if(m.data_process_after_render!==undefined){ m.data_process_after_render('grid'); }
     })
@@ -99,9 +79,9 @@ m.render=function(){
         if(m.records[i].DateTime!==undefined){
             m.records[i].DateTime=m.records[i].DateTime.substring(0,10);
         }
-        if(m.records[i].vm_dirty===undefined) m.records[i].vm_dirty=0;
-        if(m.records[i].vm_custom===undefined) m.records[i].vm_custom={};
-        if(m.records[i].vm_readonly===undefined) m.records[i].vm_readonly={};
+        //if(m.records[i].vm_dirty===undefined) m.records[i].vm_dirty=0;
+        //if(m.records[i].vm_custom===undefined) m.records[i].vm_custom={};
+        //if(m.records[i].vm_readonly===undefined) m.records[i].vm_readonly={};
     }
 
     var txt="";
@@ -140,7 +120,7 @@ m.render=function(){
             if(value==undefined) value="";
             value=value.toString();
             value=$('<div/>').text(value).html();
-            value=value.replace(/\n/g,'<br>');
+            value=value.replace(/\n/g,'<br>').replace(/\r/g,'');
             var print='';
             if(m.field_header[j][0]=='_') print='class=c_print';
             txt+="<td data-id="+b+" "+print+" >"+value+"</td>";
@@ -188,6 +168,7 @@ m.cell_process=function(){
         //-------------------------
         if(m.cell_render!==undefined){ m.cell_render(m.records,row,column_name,$(this)); }
         //-------------------------
+        /*
         if(column_name=='_Form' || column_name=='_Delete' || column_name=='DateTime' || column_name=='Author' || m.records[row].vm_readonly[column_name]===true){
             if($vm.edge==0) $(this).removeAttr('contenteditable');
             else if($vm.edge==1) $(this).find('div:first').removeAttr('contenteditable');
@@ -197,6 +178,7 @@ m.cell_process=function(){
             if($vm.edge==0) $(this).removeAttr('contenteditable');
             else if($vm.edge==1) $(this).find('div:first').removeAttr('contenteditable');
         }
+        */
     })
     //------------------------------------
 }
@@ -219,9 +201,16 @@ m.create_header=function(){
 }
 //-------------------------------------
 m.delete=function(rid){
-    $vm.request({cmd:"delete",id:rid,table:m.Table},function(res){
+    var d_cmd="delete";
+    if(m.cmd_type=='table') d_cmd='delete-table';
+    $vm.request({cmd:d_cmd,id:rid,table:m.Table},function(res){
         //-----------------------------
-        if(res.sys.permission==false){
+        if(res.status=="lk"){
+            $vm.alert("This record is locked.");
+            return;
+        }
+        //-----------------------------
+        if(res.status=="np"){
             alert("No permission to delete this record.");
             return;
         }
@@ -237,7 +226,8 @@ m.delete=function(rid){
 };
 //-------------------------------
 m.export_records=function(){
-    var req={cmd:"export",table:m.Table,query:m.query,options:m.options,search:$('#keyword__ID').val()}
+    //var req={cmd:"export",table:m.Table,I1:m.I1,search:$('#keyword__ID').val()}
+    var req={cmd:"export",table:m.Table,query:m.query,I1:m.I1,search:$('#keyword__ID').val()}
     open_model__ID();
     $vm.request(req,function(N,i,txt){
         console.log(i+"/"+N);
@@ -251,7 +241,6 @@ m.export_records=function(){
                     delete o[k].tax;
                 }
             }
-            //console.log(JSON.stringify(o))
             $vm.download_csv(m.Table+".csv",o);
             close_model__ID();
         }
@@ -281,25 +270,31 @@ m.handleFileSelect=function(evt){
                     var n1=lines[0].split('\t').length;
                     var n2=lines[0].split(',').length;
                     if(n2>n1) tab=',';
-                    var header=lines[0].replace(/ /g,'_').splitCSV(tab);
-                    var flds=fields.split(',');
+                    var flds=lines[0].replace(/ /g,'_').splitCSV(tab);
+                    //var import_fields=fields;
+                    //if(m.import_fields!=undefined) import_fields=m.import_fields;
+                    //var flds=header.split(',');
                     var fn=$('#Import_f__ID').val().substring($('#Import_f__ID').val().lastIndexOf('\\')+1);
                     if(confirm("Are you sure to import "+fn+"?\n")){
                         open_model__ID();
                         var I=0;
                         var i=1;
-                        var permission=1;
+                        var status="ok";
                         (function looper(){
-                            if( i<=lines.length && i<=NN && permission==1) {
+                            if( i<=lines.length && i<=NN && status=='ok') {
                                 var items=lines[i].splitCSV(tab);
                                 if(items.length>=1){
                                     var rd={};
                                     var dbv={};
                                     for(var j=0;j<flds.length;j++){
                                         var field_id=flds[j];
-                                        var index=header.indexOf(field_id);
+                                        var index=flds.indexOf(field_id);
                                         var index2=form_fields.indexOf(field_id);
-                                        if(index!=-1 && index2!=-1 && field_id.toUpperCase()!='ID')  rd[field_id]=items[index];
+                                        if(index!=-1 && index2!=-1)  rd[field_id]=items[index];
+                                        if(field_id=='UID' && j==0) rd['UID']=items[0];
+                                        if(field_id=='Submit_date' && j==1) rd['Submit_date']=items[1];
+                                        if(field_id=='Submitted_by' && j==2) rd['Submitted_by']=items[2];
+                                        if(field_id=='I1' && j==3) dbv['I1']=items[3];
                                     }
                                     if( jQuery.isEmptyObject(rd)===false){
                                         if(typeof(before_submit)!='undefined'){
@@ -307,8 +302,9 @@ m.handleFileSelect=function(evt){
                                         }
                                         jQuery.ajaxSetup({async:false});
                                         $vm.request({cmd:"insert",table:m.Table,data:rd,index:dbv,file:{}},function(res){
-                                            permission=res.sys.permission;
+                                            status=res.status;
                                         });
+                                        //console.log(rd)
                                         I++;
                                         jQuery.ajaxSetup({async:true});
                                     }
@@ -334,7 +330,6 @@ m.handleFileSelect=function(evt){
         var prefix=""; if(m.prefix!=undefined) prefix=m.prefix;
         $vm.load_module(prefix+m.form_module,"hidden",{})
     }
-
     var I=0;
     var loop__ID=setInterval(function (){
         if($vm.module_list[m.form_module].submit!=undefined){
@@ -356,7 +351,7 @@ m.handleFileSelect=function(evt){
     //-------------------------------------
 }
 //-----------------------------------------------
-document.getElementById('Import_f__ID').addEventListener('change', m.handleFileSelect,false);
+if(document.getElementById('Import_f__ID')!=null) document.getElementById('Import_f__ID').addEventListener('change', m.handleFileSelect,false);
 //---------------------------------------------
 $('#search__ID').on('click',function(){   m.set_req(); m.request_data(); })
 $('#query__ID').on('click',function(){    m.set_req(); m.request_data(); })
@@ -392,8 +387,9 @@ $('#new__ID').on('click', function(){
     }
     m.render(0);
 });
-$('#D__ID').on('load',function(){  m.input=$vm.vm['__ID'].input; if(m.preload==true) return; if(m.load!=undefined) m.load(); m.set_req(); m.request_data(); })
-$('#D__ID').on('show',function(){  
+$('#D__ID').on('load',function(){  /*m.input=$vm.vm['__ID'].input;*/ if(m.preload==true) return; if(m.load!=undefined) m.load(); m.set_req(); m.request_data(); })
+//$('#D__ID').on('show',function(){  if($vm.refresh==1){$vm.refresh=0; m.set_req(); m.request_data();} })
+$('#D__ID').on('show',function(){
     if($vm.module_list[m.prefix+m.form_module]!=undefined){
         var s=$vm.module_list[m.prefix+m.form_module].change_status;
         if(m.change_status!=s){
@@ -402,8 +398,14 @@ $('#D__ID').on('show',function(){
             m.request_data();
         }
     }
-    //if($vm.refresh==1){$vm.refresh=0; m.set_req(); m.request_data();} 
-})
+    else if($vm.refresh==1){
+        $vm.refresh=0; 
+        m.set_req(); 
+        m.request_data();
+    }
+});
+//--------------------------------------------------------
+
 //-----------------------------------------------
 m.set_file_link=function(records,I,field,td){
     var filename=records[I].Data[field];

@@ -1,13 +1,13 @@
 <div id=D__ID>
     <div>
-        VmInclude:__COMPONENT__/g/grid.01.html
+        VmInclude:__CURRENT_PATH__/grid.01.html
     </div>
     <script>
         function F__ID(){
             //-------------------------------------
-            VmInclude:__COMPONENT__/g/grid.01.js
+            VmInclude:__CURRENT_PATH__/grid.01.js
             //-------------------------------------
-            var fields="Date,Name,Amount,Description,Group,Category,Document,Other_sales,Gross_interest,Salary_expenses,Super_expenses,All_other_expenses";
+            var fields="Date,Ver,Name,Amount,Description,Group,Category,Document,Other_sales,Gross_interest,Salary_expenses,Super_expenses,All_other_expenses";
             m.fields="_Form,"+fields+",Submit_date,Submitted_by,_Delete";
             //-------------------------------------
             m.cell_render=function(records,I,field,td){
