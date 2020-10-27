@@ -1,0 +1,133 @@
+<div id=D__ID>
+    <!--third html start -->
+    <div class="container mt-95 mb-3">
+        <div class="row">
+            <!-- form container start -->
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 mx-auto formbox">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- form start -->
+                        <form id="F__ID">
+                            <h3>Bank Transaction</h3>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label><span class="">Date</span>
+                                            <input type=date name="Date" class=form-control />
+                                        </label><br>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label style='width:100%'><span class="">Transaction Details</span>
+                                            <input type="text" class="form-control" name=Transaction_Details />
+                                        </label>
+                                    </fieldset>
+                                </div>
+							</div>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+										<label><span class="">Transaction Type</span>
+											<select name="Transaction_Type" class=form-control>
+											<option></option>
+											<option>TRANSFER DEBIT</option>
+											<option>TRANSFER CREDIT</option>
+											<option>MISCELLANEOUS DEBIT</option>
+											<option>MISCELLANEOUS CREDIT</option>
+											<option>FEES</option>
+											</select>
+										</label>
+									</fieldset>
+								</div>
+                            </div>	
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label><span class="">Amount</span>
+                                            <input type=number step=0.01 name="Amount" id=Amount__ID class=form-control />
+                                        </label><br>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="questiongroup">
+                                    <fieldset class="subquestions">
+                                        <label><span class="">Debit</span>
+                                            <input type=number step=0.01 name="Debit" id=Debit__ID class=form-control />
+                                        </label><br>
+                                        <label><span class="">Credit</span>
+                                            <input type=number step=0.01 name="Credit" id=Credit__ID class=form-control />
+                                        </label><br>
+                                        <label><span class="">Balance</span>
+                                            <input type=number step=0.01 name="Balance" id=Balance__ID class=form-control />
+                                        </label><br>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+								<button type="submit" id="submit__ID" class="btn btn-primary btn-lg">Submit</button>
+								<button type="button" id="delete__ID" class="btn btn-primary btn-lg">Delete</button>
+                            </div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+	VmInclude:__COMPONENT__/m/model.01.html
+    <script>
+    	function F__ID(){
+    		//-------------------------------------
+			VmInclude:__COMPONENT__/f/form.01.js
+    		//-------------------------------------
+/*			var load=m.load;
+			m.load=function(){
+				load();
+			}
+*/			//-------------------------------------
+			m.before_submit=function(data,index){
+                var d= new Date(data.Date);
+                console.log(data.Transaction_Type.indexOf('FEES'))
+                data.Date=$vm.date_to_yyyymmdd(d)
+                if(data.Transaction_Type.indexOf('DEBIT')>=0 || data.Transaction_Type.indexOf('FEES')>=0 ){
+                    data.Debit=parseFloat(data.Amount);
+                    data.Credit=0;
+                }
+                if(data.Transaction_Type.indexOf('CREDIT')>=0){
+                    data.Credit=parseFloat(data.Amount);
+                    data.Debit=0;
+                }
+				data.Balance=parseFloat(data.Balance);
+				index.I1=data.Date;
+				index.I2=data.Debit;
+				index.I3=data.Credit;
+				index.I4=data.Balance;
+                console.log(JSON.stringify(data))
+			}
+			//-------------------------------------
+    	}
+    </script>
+    <style>
+        #form_container__ID{
+            max-width:700px;
+        }
+        VmInclude:__CURRENT_PATH__/wappsystem-form.css
+        #F__ID b{
+            display:inline-block;
+            margin-bottom:10px;
+        }
+		.no_border__ID{
+			border:0px solid black;
+			font-size:9px!important;
+			color:#555!important;
+			width: 40px!important;
+		}
+		#items__ID input:focus { 
+		  	border:0 solid black !important;
+			outline: none !important;
+		}
+    </style>
+</div>
